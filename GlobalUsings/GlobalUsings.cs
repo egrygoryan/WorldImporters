@@ -1,0 +1,10 @@
+﻿global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.RazorPages;
+global using Microsoft.AspNetCore.Mvc.Rendering;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using WorldImporters.Data.Context;
+global using WorldImporters.Data.Entities;
+global using WorldImporters.Data.Repositories;
+global using WorldImporters.Data.Repositories.Interfaces;
+global using WorldImporters.ViewModels;
