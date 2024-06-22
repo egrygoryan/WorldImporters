@@ -1,0 +1,13 @@
+﻿.edit-btn, .save-btn {
+	display: none;
+	margin-left: 5px;
+}
+
+.editable input, .editable select {
+	border: 1px solid #ccc;
+	background-color: #fff;
+}
+
+.table tr:hover .edit-btn {
+	display: inline-block;
+}
