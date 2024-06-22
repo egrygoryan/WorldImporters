@@ -1,0 +1,91 @@
+﻿@page "/products"
+@model WorldImporters.Pages.ProductPage.IndexModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+@if (Model.Products.Any())
+{
+    <form method="get">
+        <label for="MaxProducts">Maximum Number of Products to Show:</label>
+        <input type="number" id="MaxProducts" name="MaxProducts" value="@Model.MaxProducts" min="0" />
+        <button type="submit">Apply</button>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].ProductName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].QuantityPerUnit)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].UnitPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].UnitsInStock)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].UnitsOnOrder)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].ReorderLevel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Discontinued)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].SupplierName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.QuantityPerUnit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.UnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.UnitsInStock)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.UnitsOnOrder)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.ReorderLevel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Discontinued)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.CategoryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.SupplierName)
+                    </td>
+                    <td>
+                        <a asp-page="./ProductEdit" asp-route-id="@product.ProductId">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else
+{
+    <div class="text-center">
+        <p>No available products</p>
+    </div>
+}
+

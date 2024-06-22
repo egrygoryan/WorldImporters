@@ -1,0 +1,23 @@
+﻿@page "/categories"
+@model WorldImporters.Pages.CategoryPage.IndexModel
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+@if (Model.Categories.Any())
+{
+    <ul>
+        @foreach (var category in Model.Categories)
+        {
+            <li>
+                <strong>@category.CategoryName</strong> - @category.Description
+            </li>
+        }
+    </ul>
+} else
+{
+    <div class="text-center">
+        <p>No available categories</p>
+    </div>
+}
