@@ -4,8 +4,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddServices();
 builder.AddLogger();
+
+var connectionName = builder.Environment.IsDevelopment()
+    ? "SqlLocal"
+    : "AzureSql";
+builder.Services.AddServices(connectionName);
 
 var app = builder.Build();
 
