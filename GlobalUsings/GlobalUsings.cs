@@ -7,4 +7,5 @@ global using WorldImporters.Data.Context;
 global using WorldImporters.Data.Entities;
 global using WorldImporters.Data.Repositories;
 global using WorldImporters.Data.Repositories.Interfaces;
+global using WorldImporters.DTO;
 global using WorldImporters.ViewModels;

@@ -7,9 +7,6 @@ public class IndexModel(ICategoryRepository repo) : PageModel
     {
         var categories = await repo.GetAllAsync();
 
-        Categories = categories
-            .Select(x => new CategoryIndexVM(
-                CategoryName: x.CategoryName,
-                Description: x.Description ?? "No description"));
+        Categories = CategoryIndexVM.ConvertFromCategory(categories);
     }
 }

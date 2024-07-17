@@ -40,4 +40,19 @@ public class ProductEditVM
 
     [Display(Name = "Supplier")]
     public int SupplierId { get; set; }
+
+    public static implicit operator ProductEditVM(Product product) =>
+        new()
+        {
+            ProductId = product.ProductId,
+            ProductName = product.ProductName,
+            QuantityPerUnit = product.QuantityPerUnit,
+            UnitPrice = product.UnitPrice,
+            UnitsInStock = product.UnitsInStock,
+            UnitsOnOrder = product.UnitsOnOrder,
+            ReorderLevel = product.ReorderLevel,
+            Discontinued = product.Discontinued,
+            CategoryId = product.CategoryId ?? default,
+            SupplierId = product.SupplierId ?? default,
+        };
 }

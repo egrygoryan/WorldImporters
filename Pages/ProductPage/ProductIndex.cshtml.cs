@@ -13,22 +13,6 @@ public class IndexModel(
         var products = await repo.GetRangeAsync(MaxProducts);
         logger.LogInformation($"Max. products limit is {MaxProducts}");
 
-        Products = products
-            .Select(x => new ProductIndexVM
-            {
-                ProductId = x.ProductId,
-                ProductName = x.ProductName,
-                QuantityPerUnit = x.QuantityPerUnit,
-                UnitPrice = x.UnitPrice,
-                UnitsInStock = x.UnitsInStock,
-                UnitsOnOrder = x.UnitsOnOrder,
-                ReorderLevel = x.ReorderLevel,
-                Discontinued = x.Discontinued,
-                CategoryName = x.Category?.CategoryName
-                               ?? "N/A",
-                SupplierName = x.Supplier?.CompanyName
-                               ?? "N/A"
-            })
-            .ToList();
+        Products = ProductIndexVM.ConvertFromCategory(products);
     }
 }

@@ -21,19 +21,7 @@ public class EditModel(
             return NotFound();
         }
 
-        Product = new ProductEditVM()
-        {
-            ProductId = product.ProductId,
-            ProductName = product.ProductName,
-            QuantityPerUnit = product.QuantityPerUnit,
-            UnitPrice = product.UnitPrice,
-            UnitsInStock = product.UnitsInStock,
-            UnitsOnOrder = product.UnitsOnOrder,
-            ReorderLevel = product.ReorderLevel,
-            Discontinued = product.Discontinued,
-            CategoryId = product.CategoryId ?? default,
-            SupplierId = product.SupplierId ?? default,
-        };
+        Product = product;
 
         var categoriesAwaiter = await categoryRepo.GetAllAsync();
         var categories = categoriesAwaiter.Select(x => new { x.CategoryId, x.CategoryName });
@@ -57,19 +45,7 @@ public class EditModel(
             return Page();
         }
 
-        var productToUpdate = new Product
-        {
-            ProductId = Product.ProductId,
-            ProductName = Product.ProductName,
-            QuantityPerUnit = Product.QuantityPerUnit,
-            UnitPrice = Product.UnitPrice,
-            UnitsInStock = Product.UnitsInStock,
-            UnitsOnOrder = Product.UnitsOnOrder,
-            ReorderLevel = Product.ReorderLevel,
-            Discontinued = Product.Discontinued,
-            CategoryId = Product.CategoryId,
-            SupplierId = Product.SupplierId,
-        };
+        Product productToUpdate = Product;
 
         try
         {

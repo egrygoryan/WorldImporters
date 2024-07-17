@@ -31,4 +31,27 @@ public class ProductIndexVM
 
     [Display(Name = "Supplier")]
     public string SupplierName { get; set; } = default!;
+
+    public static implicit operator ProductIndexVM(ProductDTO product) =>
+        new()
+        {
+            ProductId = product.ProductId,
+            ProductName = product.ProductName,
+            QuantityPerUnit = product.QuantityPerUnit,
+            UnitPrice = product.UnitPrice,
+            UnitsInStock = product.UnitsInStock,
+            UnitsOnOrder = product.UnitsOnOrder,
+            ReorderLevel = product.ReorderLevel,
+            Discontinued = product.Discontinued,
+            CategoryName = product.CategoryName
+                               ?? "N/A",
+            SupplierName = product.SupplierName
+                               ?? "N/A"
+        };
+
+    public static IList<ProductIndexVM> ConvertFromCategory(IEnumerable<ProductDTO> products)
+    {
+        List<ProductIndexVM> models = [.. products];
+        return models;
+    }
 }

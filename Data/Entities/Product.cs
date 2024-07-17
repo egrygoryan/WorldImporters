@@ -27,4 +27,19 @@ public partial class Product
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual Supplier? Supplier { get; set; }
+
+    public static implicit operator Product(ProductEditVM model) =>
+        new()
+        {
+            ProductId = model.ProductId,
+            ProductName = model.ProductName,
+            QuantityPerUnit = model.QuantityPerUnit,
+            UnitPrice = model.UnitPrice,
+            UnitsInStock = model.UnitsInStock,
+            UnitsOnOrder = model.UnitsOnOrder,
+            ReorderLevel = model.ReorderLevel,
+            Discontinued = model.Discontinued,
+            CategoryId = model.CategoryId,
+            SupplierId = model.SupplierId,
+        };
 }
