@@ -12,4 +12,5 @@ public record ProductDTO(
     short? UnitsInStock,
     short? UnitsOnOrder,
     short? ReorderLevel,
-    bool Discontinued);
+    bool Discontinued,
+    string ImagePath);

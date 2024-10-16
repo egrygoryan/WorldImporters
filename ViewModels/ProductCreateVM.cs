@@ -1,6 +1,6 @@
 ﻿namespace WorldImporters.ViewModels;
 
-public class ProductEditVM
+public class ProductCreateVM
 {
     public int ProductId { get; set; }
 
@@ -41,23 +41,4 @@ public class ProductEditVM
 
     [Display(Name = "Upload Image")]
     public IFormFile? ImageFile { get; set; }
-
-    [Display(Name = "Image")]
-    public string? ImageName { get; set; } = default!;
-
-    public static implicit operator ProductEditVM(Product product) =>
-        new()
-        {
-            ProductId = product.ProductId,
-            ProductName = product.ProductName,
-            QuantityPerUnit = product.QuantityPerUnit,
-            UnitPrice = product.UnitPrice,
-            UnitsInStock = product.UnitsInStock,
-            UnitsOnOrder = product.UnitsOnOrder,
-            ReorderLevel = product.ReorderLevel,
-            Discontinued = product.Discontinued,
-            CategoryId = product.CategoryId ?? default,
-            SupplierId = product.SupplierId ?? default,
-            ImageName = Path.GetFileName(product.ImagePath)
-        };
 }

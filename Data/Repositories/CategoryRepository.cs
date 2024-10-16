@@ -8,7 +8,8 @@ public class CategoryRepository(WorldImportersContext ctx) : ICategoryRepository
             {
                 CategoryId = x.CategoryId,
                 CategoryName = x.CategoryName,
-                Description = x.Description
+                Description = x.Description,
+                Picture = x.Picture,
             })
             .ToListAsync();
 }

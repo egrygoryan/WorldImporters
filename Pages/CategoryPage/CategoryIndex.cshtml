@@ -11,6 +11,7 @@
         @foreach (var category in Model.Categories)
         {
             <li>
+                <img src="data:image/jpg;base64,@Convert.ToBase64String(category.Image)" alt="@category.CategoryName" width="50" height="50" />
                 <strong>@category.CategoryName</strong> - @category.Description
             </li>
         }

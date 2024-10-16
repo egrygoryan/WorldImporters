@@ -13,6 +13,6 @@ public class IndexModel(
         var products = await repo.GetRangeAsync(MaxProducts);
         logger.LogInformation($"Max. products limit is {MaxProducts}");
 
-        Products = ProductIndexVM.ConvertFromCategory(products);
+        Products = ProductIndexVM.ConvertFromProducts(products);
     }
 }

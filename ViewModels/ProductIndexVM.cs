@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WorldImporters.ViewModels;
+﻿namespace WorldImporters.ViewModels;
 
 public class ProductIndexVM
 {
@@ -32,6 +30,9 @@ public class ProductIndexVM
     [Display(Name = "Supplier")]
     public string SupplierName { get; set; } = default!;
 
+    [Display(Name = "Image")]
+    public string ImageName { get; set; } = default!;
+
     public static implicit operator ProductIndexVM(ProductDTO product) =>
         new()
         {
@@ -46,10 +47,11 @@ public class ProductIndexVM
             CategoryName = product.CategoryName
                                ?? "N/A",
             SupplierName = product.SupplierName
-                               ?? "N/A"
+                               ?? "N/A",
+            ImageName = Path.GetFileName(product.ImagePath)
         };
 
-    public static IList<ProductIndexVM> ConvertFromCategory(IEnumerable<ProductDTO> products)
+    public static IList<ProductIndexVM> ConvertFromProducts(IEnumerable<ProductDTO> products)
     {
         List<ProductIndexVM> models = [.. products];
         return models;
