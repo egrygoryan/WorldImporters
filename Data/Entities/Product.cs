@@ -22,6 +22,8 @@ public partial class Product
 
     public bool Discontinued { get; set; }
 
+    public string ImagePath { get; set; } = null!;
+
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
@@ -41,5 +43,19 @@ public partial class Product
             Discontinued = model.Discontinued,
             CategoryId = model.CategoryId,
             SupplierId = model.SupplierId,
+        };
+
+    public static implicit operator Product(ProductCreateVM model) =>
+        new()
+        {
+            ProductName = model.ProductName,
+            QuantityPerUnit = model.QuantityPerUnit,
+            UnitPrice = model.UnitPrice,
+            UnitsInStock = model.UnitsInStock,
+            UnitsOnOrder = model.UnitsOnOrder,
+            ReorderLevel = model.ReorderLevel,
+            Discontinued = model.Discontinued,
+            CategoryId = model.CategoryId,
+            SupplierId = model.SupplierId
         };
 }

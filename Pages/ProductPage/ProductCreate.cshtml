@@ -1,15 +1,16 @@
-﻿@page "/products/edit/{id:int}"
-@model WorldImporters.Pages.ProductPage.EditModel
+﻿@page "/products/create"
+@model WorldImporters.Pages.ProductPage.ProductCreateModel
 
 @{
-    ViewData["Title"] = "Edit Product";
+    ViewData["Title"] = "ProductCreate";
 }
+
+<h3>Product</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form enctype ="multipart/form-data" method="post">
+        <form enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Product.ProductId" />
             <div class="form-group">
                 <label asp-for="Product.ProductName" class="control-label"></label>
                 <input asp-for="Product.ProductName" class="form-control" />
@@ -55,24 +56,20 @@
                     <input class="form-check-input" asp-for="Product.Discontinued" /> @Html.DisplayNameFor(model => model.Product.Discontinued)
                 </label>
             </div>
-            <div>
-                <label asp-for="Product.ImageName" class="control-label"></label> 
-                <img src="~/products/@Model.Product.ImageName" class="img-thumbnail" 
-                    style="width: 200px; height: 200px;" />
-            </div>
             <div class="form-group">
+                <label asp-for="Product.ImageFile" class="control-label">Upload File</label>
                 <input asp-for="Product.ImageFile" type="file" class="form-control" accept=".jpg, .png, .webp, .jpeg" />
                 <span asp-validation-for="Product.ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./ProductIndex">Back to List</a>
+    <a asp-page="Index">Back to List</a>
 </div>
 
 @section Scripts {

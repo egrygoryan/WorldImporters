@@ -2,6 +2,12 @@
 
 public class ProductRepository(WorldImportersContext ctx) : IProductRepository
 {
+    public async Task CreateAsync(Product product)
+    {
+        await ctx.AddAsync(product);
+        await ctx.SaveChangesAsync();
+    }
+
     public async Task<Product?> GetAsync(int? id) =>
         await ctx
             .Products
@@ -24,7 +30,8 @@ public class ProductRepository(WorldImportersContext ctx) : IProductRepository
                 x.UnitsInStock,
                 x.UnitsOnOrder,
                 x.ReorderLevel,
-                x.Discontinued));
+                x.Discontinued,
+                x.ImagePath));
 
         var products = range > 0
             ? productQuery.Take(range)

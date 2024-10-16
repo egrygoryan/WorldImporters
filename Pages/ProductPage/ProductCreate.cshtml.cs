@@ -1,29 +1,16 @@
 ﻿namespace WorldImporters.Pages.ProductPage;
 
-public class EditModel(
+public class ProductCreateModel(
     IProductRepository productRepo,
     ICategoryRepository categoryRepo,
     ISupplierRepository supplierRepo,
     IImageServiceProcessor imageService) : PageModel
 {
     [BindProperty]
-    public ProductEditVM Product { get; set; } = default!;
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public ProductCreateVM Product { get; set; } = default!;
+
+    public async Task<IActionResult> OnGet()
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var product = await productRepo.GetAsync(id);
-
-        if (product is null)
-        {
-            return NotFound();
-        }
-
-        Product = product;
-
         var categoriesAwaiter = await categoryRepo.GetAllAsync();
         var categories = categoriesAwaiter.Select(x => new { x.CategoryId, x.CategoryName });
 
@@ -37,8 +24,7 @@ public class EditModel(
         return Page();
     }
 
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see https://aka.ms/RazorPagesCRUD.
+    // For more information, see https://aka.ms/RazorPagesCRUD.
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
@@ -46,10 +32,11 @@ public class EditModel(
             return Page();
         }
 
-        Product productToUpdate = Product;
+        Product productToCreate = Product;
+
         try
         {
-            productToUpdate.ImagePath = await imageService.ProcessImageAsync(Product.ImageFile);
+            productToCreate.ImagePath = await imageService.ProcessImageAsync(Product.ImageFile);
         }
         catch (ArgumentNullException)
         {
@@ -60,29 +47,8 @@ public class EditModel(
             return BadRequest();
         }
 
-        try
-        {
-            await productRepo.UpdateAsync(productToUpdate);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (await ProductExists(productToUpdate.ProductId))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
+        await productRepo.CreateAsync(productToCreate);
 
         return RedirectToPage("./ProductIndex");
-    }
-
-    private async Task<bool> ProductExists(int id)
-    {
-        var product = await productRepo.GetAsync(id);
-
-        return product is null;
     }
 }
