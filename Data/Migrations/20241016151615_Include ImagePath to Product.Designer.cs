@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorldImporters.Data.Context;
 
@@ -11,9 +12,11 @@ using WorldImporters.Data.Context;
 namespace WorldImporters.Data.Migrations
 {
     [DbContext(typeof(WorldImportersContext))]
-    partial class WorldImportersContextModelSnapshot : ModelSnapshot
+    [Migration("20241016151615_Include ImagePath to Product")]
+    partial class IncludeImagePathtoProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

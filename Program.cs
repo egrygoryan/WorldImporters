@@ -1,15 +1,13 @@
-using WorldImporters.Configuration;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.AddLogger();
+builder.AddImageConfiguration();
 
-var connectionName = builder.Environment.IsDevelopment()
-    ? "SqlLocal"
-    : "AzureSql";
-builder.Services.AddServices(connectionName);
+var connection = builder.Configuration.GetConnectionString(
+    builder.Environment.IsDevelopment() ? "SqlLocal" : "AzureSql");
+builder.Services.AddServices(connection);
 
 var app = builder.Build();
 
@@ -22,7 +20,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
+app.AddStaticImages();
+
 
 app.UseRouting();
 
