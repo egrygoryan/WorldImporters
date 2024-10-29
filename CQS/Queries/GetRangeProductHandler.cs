@@ -2,7 +2,7 @@
 
 public sealed class GetRangeProductHandler(
     IProductRepository productRepo,
-    ILogger logger)
+    ILogger<GetRangeProductHandler> logger)
     : IQueryHandler<GetRangeProducts, IEnumerable<ProductDTO>>
 {
     public async Task<IEnumerable<ProductDTO>> Handle(GetRangeProducts query)

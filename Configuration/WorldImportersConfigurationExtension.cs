@@ -13,13 +13,12 @@ public static class WorldImportersConfigurationExtension
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<ISupplierRepository, SupplierRepository>()
             .Scan(scan => scan
-                .FromExecutingAssembly()
+                .FromCallingAssembly()
                 .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime())
-
             .Scan(scan => scan
-                .FromExecutingAssembly()
+                .FromCallingAssembly()
                 .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
