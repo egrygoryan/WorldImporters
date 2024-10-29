@@ -11,6 +11,17 @@ public static class WorldImportersConfigurationExtension
                 .Decorate<IImageServiceProcessor, DefaultImageProcessor>()
             .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
-            .AddScoped<ISupplierRepository, SupplierRepository>();
+            .AddScoped<ISupplierRepository, SupplierRepository>()
+            .Scan(scan => scan
+                .FromExecutingAssembly()
+                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime())
+
+            .Scan(scan => scan
+                .FromExecutingAssembly()
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime());
     }
 }

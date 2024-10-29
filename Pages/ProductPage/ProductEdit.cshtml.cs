@@ -1,10 +1,10 @@
 ﻿namespace WorldImporters.Pages.ProductPage;
 
 public class EditModel(
-    IProductRepository productRepo,
     ICategoryRepository categoryRepo,
     ISupplierRepository supplierRepo,
-    IImageServiceProcessor imageService) : PageModel
+    ICommandHandler<EditProduct> command,
+    IQueryHandler<GetByIdProduct, Product?> query) : PageModel
 {
     [BindProperty]
     public ProductEditVM Product { get; set; } = default!;
@@ -15,8 +15,10 @@ public class EditModel(
             return NotFound();
         }
 
-        var product = await productRepo.GetAsync(id);
+        var product = await query.Handle(new GetByIdProduct(id));
 
+        //apply Result class, to check whether it succeed
+        //move this check to command/query handlers
         if (product is null)
         {
             return NotFound();
@@ -24,15 +26,7 @@ public class EditModel(
 
         Product = product;
 
-        var categoriesAwaiter = await categoryRepo.GetAllAsync();
-        var categories = categoriesAwaiter.Select(x => new { x.CategoryId, x.CategoryName });
-
-        var suppliersAwaiter = await supplierRepo.GetAllAsync();
-        var suppliers = suppliersAwaiter.Select(x => new { x.SupplierId, x.CompanyName })
-                                        .OrderBy(x => x.CompanyName);
-
-        ViewData["Categories"] = new SelectList(categories, "CategoryId", "CategoryName");
-        ViewData["Suppliers"] = new SelectList(suppliers, "SupplierId", "CompanyName");
+        await SeedDropdowns();
 
         return Page();
     }
@@ -43,46 +37,25 @@ public class EditModel(
     {
         if (!ModelState.IsValid)
         {
+            await SeedDropdowns();
             return Page();
         }
 
-        Product productToUpdate = Product;
-        try
-        {
-            productToUpdate.ImagePath = await imageService.ProcessImageAsync(Product.ImageFile);
-        }
-        catch (ArgumentNullException)
-        {
-            return StatusCode(500, new { Message = "Internal Server Error" });
-        }
-        catch (ArgumentException)
-        {
-            return BadRequest();
-        }
-
-        try
-        {
-            await productRepo.UpdateAsync(productToUpdate);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (await ProductExists(productToUpdate.ProductId))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
+        await command.Handle(new EditProduct(Product));
 
         return RedirectToPage("./ProductIndex");
     }
 
-    private async Task<bool> ProductExists(int id)
+    private async Task SeedDropdowns()
     {
-        var product = await productRepo.GetAsync(id);
+        var categoriesAwaiter = await categoryRepo.GetAllAsync();
+        var categories = categoriesAwaiter.Select(x => new { x.CategoryId, x.CategoryName });
 
-        return product is null;
+        var suppliersAwaiter = await supplierRepo.GetAllAsync();
+        var suppliers = suppliersAwaiter.Select(x => new { x.SupplierId, x.CompanyName })
+                                        .OrderBy(x => x.CompanyName);
+
+        ViewData["Categories"] = new SelectList(categories, "CategoryId", "CategoryName");
+        ViewData["Suppliers"] = new SelectList(suppliers, "SupplierId", "CompanyName");
     }
 }

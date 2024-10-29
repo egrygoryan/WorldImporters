@@ -1,8 +1,8 @@
 ﻿namespace WorldImporters.Pages.ProductPage;
 
 public class IndexModel(
-    IProductRepository repo,
-    ILogger<IndexModel> logger) : PageModel
+    IQueryHandler<GetRangeProducts,
+        IEnumerable<ProductDTO>> query) : PageModel
 {
     [BindProperty(SupportsGet = true)]
     public int MaxProducts { get; set; } = 0;
@@ -10,8 +10,7 @@ public class IndexModel(
 
     public async Task OnGetAsync()
     {
-        var products = await repo.GetRangeAsync(MaxProducts);
-        logger.LogInformation($"Max. products limit is {MaxProducts}");
+        var products = await query.Handle(new GetRangeProducts(MaxProducts));
 
         Products = ProductIndexVM.ConvertFromProducts(products);
     }
