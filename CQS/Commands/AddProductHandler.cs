@@ -2,14 +2,23 @@
 
 public sealed class AddProductHandler(
     IProductRepository productRepo,
-    IImageServiceProcessor imageService) : ICommandHandler<AddProduct>
+    IImageServiceProcessor imageService)
+    : ICommandHandler<AddProduct, Created>
 {
-    public async Task Handle(AddProduct command)
+    public async Task<ErrorOr<Created>> Handle(AddProduct command)
     {
         Product productToCreate = command.Product;
-        productToCreate.ImagePath = await imageService.ProcessImageAsync(command.Product.ImageFile);
+        var result = await imageService.ProcessImageAsync(command.Product.ImageFile);
 
+        if (result.IsError)
+        {
+            return result.FirstError;
+        }
+
+        productToCreate.ImagePath = result.Value;
         await productRepo.CreateAsync(productToCreate);
+
+        return Result.Created;
     }
 }
 

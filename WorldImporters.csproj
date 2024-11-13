@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="ErrorOr" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
@@ -24,10 +25,6 @@
     <PackageReference Include="Scrutor" Version="5.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Logs\" />
   </ItemGroup>
 
 </Project>

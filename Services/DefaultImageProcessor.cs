@@ -6,7 +6,7 @@ public sealed class DefaultImageProcessor(
 {
     private readonly ImageSettings _imageSettings = imageSettings.Value;
 
-    public async Task<string> ProcessImageAsync(IFormFile image)
+    public async Task<ErrorOr<string>> ProcessImageAsync(IFormFile image)
     {
         if (!Directory.Exists(_imageSettings.Path))
         {

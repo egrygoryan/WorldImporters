@@ -3,12 +3,12 @@
 public class ProductCreateModel(
     ICategoryRepository categoryRepo,
     ISupplierRepository supplierRepo,
-    ICommandHandler<AddProduct> command) : PageModel
+    ICommandHandler<AddProduct, Created> command) : PageModel
 {
     [BindProperty]
     public ProductCreateVM Product { get; set; } = default!;
 
-    public async Task<IActionResult> OnGet()
+    public async Task<IActionResult> OnGetAsync()
     {
         await SeedDropdowns();
         return Page();
@@ -24,9 +24,13 @@ public class ProductCreateModel(
             return Page();
         }
 
-        await command.Handle(new AddProduct(Product));
+        var response = await command.Handle(new AddProduct(Product));
 
-        return RedirectToPage("./ProductIndex");
+        return response.IsError switch
+        {
+            true => BadRequest(response.FirstError.Description),
+            _ => RedirectToPage("./ProductIndex"),
+        };
     }
 
     private async Task SeedDropdowns()

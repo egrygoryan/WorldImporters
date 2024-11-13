@@ -3,7 +3,7 @@
 public class EditModel(
     ICategoryRepository categoryRepo,
     ISupplierRepository supplierRepo,
-    ICommandHandler<EditProduct> command,
+    ICommandHandler<EditProduct, Updated> command,
     IQueryHandler<GetByIdProduct, Product?> query) : PageModel
 {
     [BindProperty]
@@ -16,20 +16,17 @@ public class EditModel(
         }
 
         var product = await query.Handle(new GetByIdProduct(id));
-
-        //apply Result class, to check whether it succeed
-        //move this check to command/query handlers
-        if (product is null)
-        {
-            return NotFound();
-        }
-
-        Product = product;
-
         await SeedDropdowns();
 
-        return Page();
+        //strangely sw exp produces if(true); x2 op + ternary operator
+        //but sw statement only if / else
+        return product.IsError switch
+        {
+            true => NotFound(product.FirstError.Description),
+            _ => HandleSuccess(product)
+        };
     }
+
 
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see https://aka.ms/RazorPagesCRUD.
@@ -41,9 +38,19 @@ public class EditModel(
             return Page();
         }
 
-        await command.Handle(new EditProduct(Product));
+        var response = await command.Handle(new EditProduct(Product));
 
-        return RedirectToPage("./ProductIndex");
+        return response.IsError switch
+        {
+            true => BadRequest(response.FirstError.Description),
+            _ => RedirectToPage("./ProductIndex"),
+        };
+    }
+
+    private PageResult HandleSuccess(ErrorOr<Product?> product)
+    {
+        Product = product.Value;
+        return Page();
     }
 
     private async Task SeedDropdowns()

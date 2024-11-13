@@ -8,10 +8,20 @@ public class IndexModel(
     public int MaxProducts { get; set; } = 0;
     public IList<ProductIndexVM> Products { get; private set; } = [];
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
         var products = await query.Handle(new GetRangeProducts(MaxProducts));
 
-        Products = ProductIndexVM.ConvertFromProducts(products);
+        return products.IsError switch
+        {
+            true => BadRequest(products.FirstError.Description),
+            _ => HandleSuccess(products)
+        };
+    }
+
+    private PageResult HandleSuccess(ErrorOr<IEnumerable<ProductDTO>> products)
+    {
+        Products = ProductIndexVM.ConvertFromProducts(products.Value);
+        return Page();
     }
 }

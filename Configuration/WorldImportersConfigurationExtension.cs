@@ -14,7 +14,7 @@ public static class WorldImportersConfigurationExtension
             .AddScoped<ISupplierRepository, SupplierRepository>()
             .Scan(scan => scan
                 .FromCallingAssembly()
-                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
+                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime())
             .Scan(scan => scan

@@ -1,8 +1,10 @@
 ﻿namespace WorldImporters.CQS.Interfaces;
 
-public interface ICommandHandler<TCommand> where TCommand : IRequest
+public interface ICommandHandler<TCommand, TStatus>
+    where TCommand : IRequest
+    where TStatus : struct
 {
-    Task Handle(TCommand command);
+    Task<ErrorOr<TStatus>> Handle(TCommand command);
 }
 
 //marker interface

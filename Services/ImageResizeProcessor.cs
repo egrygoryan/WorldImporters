@@ -8,12 +8,12 @@ public sealed class ImageResizeProcessor(
 {
     private readonly ImageSettings _imgSettings = imgSettings.Value;
 
-    public async Task<string> ProcessImageAsync(IFormFile image)
+    public async Task<ErrorOr<string>> ProcessImageAsync(IFormFile image)
     {
         var extension = Path.GetExtension(image.FileName);
         if (!_imgSettings.Extensions.Contains(extension))
         {
-            throw new ArgumentException($"Not supported extension type");
+            return Error.Validation(description: $"Not supported image extension type {extension}");
         }
 
         var customFileName = Path.GetRandomFileName()
@@ -29,14 +29,7 @@ public sealed class ImageResizeProcessor(
                 {
                     using var img = Image.Load(stream);
                     img.Mutate(x => x.Resize(new Size(_imgSettings.Width, _imgSettings.Height)));
-                    try
-                    {
-                        await img.SaveAsync(fileStream, img.Metadata.DecodedImageFormat);
-                    }
-                    catch (ArgumentNullException)
-                    {
-                        throw;
-                    }
+                    await img.SaveAsync(fileStream, img.Metadata.DecodedImageFormat);
                 }
                 else
                 {

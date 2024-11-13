@@ -5,11 +5,18 @@ public sealed class GetRangeProductHandler(
     ILogger<GetRangeProductHandler> logger)
     : IQueryHandler<GetRangeProducts, IEnumerable<ProductDTO>>
 {
-    public async Task<IEnumerable<ProductDTO>> Handle(GetRangeProducts query)
+    public async Task<ErrorOr<IEnumerable<ProductDTO>>> Handle(GetRangeProducts query)
     {
+        if (query.Range < 0)
+        {
+            return Error.Validation(description: "Products limit can't be less than 0");
+        }
+
         logger.LogInformation($"Max. products limit is {query.Range}");
 
-        return await productRepo.GetRangeAsync(query.Range);
+        var result = await productRepo.GetRangeAsync(query.Range);
+
+        return result.ToErrorOr();
     }
 }
 

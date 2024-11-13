@@ -2,5 +2,5 @@
 
 public interface IImageServiceProcessor
 {
-    Task<string> ProcessImageAsync(IFormFile image);
+    Task<ErrorOr<string>> ProcessImageAsync(IFormFile image);
 }

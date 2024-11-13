@@ -2,14 +2,23 @@
 
 public sealed class EditProductHandler(
     IProductRepository productRepo,
-    IImageServiceProcessor imageService) : ICommandHandler<EditProduct>
+    IImageServiceProcessor imageService)
+    : ICommandHandler<EditProduct, Updated>
 {
-    public async Task Handle(EditProduct command)
+    public async Task<ErrorOr<Updated>> Handle(EditProduct command)
     {
         Product productToUpdate = command.Product;
-        productToUpdate.ImagePath = await imageService.ProcessImageAsync(command.Product.ImageFile);
+        var result = await imageService.ProcessImageAsync(command.Product.ImageFile);
 
+        if (result.IsError)
+        {
+            return result.FirstError;
+        }
+
+        productToUpdate.ImagePath = result.Value;
         await productRepo.UpdateAsync(productToUpdate);
+
+        return Result.Updated;
     }
 }
 

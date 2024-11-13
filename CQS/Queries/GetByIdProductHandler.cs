@@ -3,9 +3,16 @@
 public sealed class GetByIdProductHandler(IProductRepository productRepo)
     : IQueryHandler<GetByIdProduct, Product?>
 {
-    public async Task<Product?> Handle(GetByIdProduct query)
+    public async Task<ErrorOr<Product?>> Handle(GetByIdProduct query)
     {
-        return await productRepo.GetAsync(query.Id);
+        var product = await productRepo.GetAsync(query.Id);
+
+        if (product is null)
+        {
+            return Error.NotFound(description: $"Product with id {query.Id} doesn't exist");
+        }
+
+        return product;
     }
 }
 
